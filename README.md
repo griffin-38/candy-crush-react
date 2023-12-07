@@ -2,8 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-* Please make sure you have Node 14.0+ installed
+Get started: 
 
+- npx create-react-app candy-crush  
+or 
+- npm create-react-app candy-crush
+
+Please make sure you have Node 14.0+ installed
+- node -v
 ## Available Scripts
 
 In the project directory, you can run:
