@@ -13,10 +13,13 @@ const candyColors = ["blue", "green", "orange", "purple", "red", "yellow"];
 const App = () => {
   // useState is a Hook that lets you add React state to function components
   const [currentColorArrangement, setCurrentColorArrangement] = useState([]);
+  const [squareBeingDragged, setSquareBeingDragged] = useState(null)
+  const [squareBeingReplaced, setSquareBeingReplaced] = useState(null)
+
 
   //Check for column of 4 using a loop
   const checkForColumnOfFour = () => {
-    for (let i = 0; i < 39; i++) {
+    for (let i = 0; i <= 39; i++) {
       const columnOfFour = [i, i + width, i + width * 2, i + width * 3];
       const decidedColor = currentColorArrangement[i];
       if (
@@ -33,7 +36,7 @@ const App = () => {
 
   //Check for column of 3 using a loop
   const checkForColumnOfThree = () => {
-    for (let i = 0; i < 47; i++) {
+    for (let i = 0; i <= 47; i++) {
       const columnOfThree = [i, i + width, i + width * 2];
       const decidedColor = currentColorArrangement[i];
       if (
@@ -91,7 +94,7 @@ const App = () => {
   };
 
   const moveIntoSquareBelow = () => {
-    for (let i = 0; i < 64; i++){
+    for (let i = 0; i < 55; i++){
       const firstRow = [0, 1, 2, 3, 4, 5, 6, 7]
       const isFirstRow = firstRow.includes(i)
 
@@ -105,6 +108,23 @@ const App = () => {
         currentColorArrangement[i] = ''
       }
     }
+  }
+
+  const dragStart = (e) =>{
+    console.log(e.target)
+    console.log('drag start')
+    setSquareBeingDragged(e.target)
+  }
+
+  const dragDrop= (e) =>{
+    console.log(e.target)
+    console.log('drag drop')
+    setSquareBeingReplaced(e.target)
+  }
+
+  const dragEnd = (e) =>{
+    console.log('drag end')
+    const squareBeingReplacedId = parseInt(squareBeingReplaced.getAttribute('data-id'))
   }
   // Create a board with an Array of 64 random colors
   const createBoard = () => {
@@ -137,12 +157,13 @@ const App = () => {
       moveIntoSquareBelow();
       // ... Takes an Array and expands to individual elements
       setCurrentColorArrangement([...currentColorArrangement]);
-    }, 100);
+    },100);
+
     return () => clearInterval(timer);
     // Dependancies
   }, [checkForColumnOfFour, checkForRowOfFour, checkForColumnOfThree, checkForRowOfThree, moveIntoSquareBelow, currentColorArrangement]);
   // Use Dev Tools to view
-  console.log(currentColorArrangement);
+ // console.log(currentColorArrangement);
   // Use map function to view the resuls
   return (
     <div className="App">
@@ -152,6 +173,14 @@ const App = () => {
             key={index}
             style={{ backgroundColor: candyColors }}
             alt={candyColors}
+            data-id={index}
+            draggable ={true}
+            onDragStart={dragStart}
+            onDragOver={(e:DragEvent<HTMLImageElement>) => e.preventDefault()}
+            onDragEnter={(e:DragEvent<HTMLImageElement>) => e.preventDefault()}
+            onDragLeave={(e:DragEvent<HTMLImageElement>) => e.preventDefault()}
+            onDrop={dragDrop}
+            onDragEnd={dragEnd}
           />
         ))}
       </div>
